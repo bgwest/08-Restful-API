@@ -18,6 +18,56 @@ Example:
 npm run start-server
 ````
 
+in a different terminal:
+
+```
+[1]bwest:08-Restful-API bwest$ echo '{"username":"vsanchez","title":"Senior Software Engineer"}' | http localhost:3000/new/user
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Type: application/json
+Date: Sat, 22 Sep 2018 06:21:33 GMT
+Transfer-Encoding: chunked
+
+{
+    "id": "c0a17ff0-be2f-11e8-93df-ffd9839776dd",
+    "timestamp": "2018-09-22T06:21:33.935Z",
+    "title": "Senior Software Engineer",
+    "username": "vsanchez"
+}
+
+[0]bwest:08-Restful-API bwest$ echo '{"id":"c0a17ff0-be2f-11e8-93df-ffd9839776dd"}' | http localhost:3000/login
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Sat, 22 Sep 2018 06:21:56 GMT
+Transfer-Encoding: chunked
+
+Hello, vsanchez.
+
+[0]bwest:08-Restful-API bwest$ echo '{"username":"bgwest","title":"Sysadmin / Junior Dev"}' | http localhost:3000/new/user?keys=12421i421\&next=1412413
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Type: application/json
+Date: Sat, 22 Sep 2018 06:22:28 GMT
+Transfer-Encoding: chunked
+
+{
+    "id": "e1605f90-be2f-11e8-93df-ffd9839776dd",
+    "timestamp": "2018-09-22T06:22:28.874Z",
+    "title": "Sysadmin / Junior Dev",
+    "username": "bgwest"
+}
+
+[0]bwest:08-Restful-API bwest$ echo '{"id":"e1605f90-be2f-11e8-93df-ffd9839776dd"}' | http :3000/login
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Sat, 22 Sep 2018 06:23:08 GMT
+Transfer-Encoding: chunked
+
+Hello, bgwest.
+
+[0]bwest:08-Restful-API bwest$
+```
+
 ### Tests Performed with Jest
 
 * test1: ensure api returns a status code of 404 for routes that have not been registered
