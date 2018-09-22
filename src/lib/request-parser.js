@@ -23,6 +23,11 @@ requestParser.parseAsync = (request) => {
     //! https://nodejs.org/api/querystring.html
     request.url.query = queryString.parse(request.url.query);
 
+    console.log('request url:');
+    console.log(request.url);
+    console.log('request url query:');
+    console.log(request.url.query);
+
     if (request.method !== 'POST' && request.method !== 'PUT') {
       return resolve(request); //! Vinicio - resolving the promise
     }

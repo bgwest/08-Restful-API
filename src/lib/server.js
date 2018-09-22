@@ -3,9 +3,10 @@
 const http = require('http');
 const logger = require('./logger');
 const router = require('./router');
-require('../routes/note-router');
+require('../routes/trees-router');
 
 const app = http.createServer(router.findAndExecuteRoutes);
+
 //-------------------------------------------------
 
 const server = module.exports = {};

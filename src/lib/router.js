@@ -51,23 +51,24 @@ router.findAndExecuteRoutes = (request, response) => {
   //  return a 404 error
   logger.log(logger.INFO, 'Routing a Request');
   requestParser.parseAsync(request) //! Vinicio - then matches to resolve()
-      .then((parsedRequest) => {
-        const handler = routeHandlers[parsedRequest.method][parsedRequest.url.pathname];
-        logger.log(logger.INFO, 'Found the following handler');
-        logger.log(logger.INFO, handler.toString());
+    .then((parsedRequest) => {
+      const handler = routeHandlers[parsedRequest.method][parsedRequest.url.pathname];
+      logger.log(logger.INFO, 'Found the following handler:');
 
-        if (handler) {
-          return handler(parsedRequest, response);
-          //! Vinicio - in this if statement, I can assume that handler contains a function
-        }
-        response.writeHead(404);
-        response.end();
-        return undefined;
-      }).catch(() => {
-    logger.log(logger.INFO, 'Responding back with 400 status code');
-    response.writeHead(400, { 'Content-Type': 'text/plain' });
-    response.write('Bad Request');
-    response.end();
-    return undefined;
-  });
+      if (handler) {
+        logger.log(logger.INFO, routeHandlers);
+        // logger.log(logger.INFO, handler.toString());
+        return handler(parsedRequest, response);
+        //! Vinicio - in this if statement, I can assume that handler contains a function
+      }
+      response.writeHead(404);
+      response.end();
+      return undefined;
+    }).catch(() => {
+      logger.log(logger.INFO, 'Responding back with 400 status code');
+      response.writeHead(400, { 'Content-Type': 'text/plain' });
+      response.write('Bad Request: router.js');
+      response.end();
+      return undefined;
+    });
 };

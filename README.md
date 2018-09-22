@@ -1,4 +1,4 @@
-# RESTful API - server.js
+# RESTful API - app.js
 ##### a vanilla RESTful API with in-memory persistence
 [![Build Status](https://travis-ci.com/bgwest/08-Restful-API.svg?branch=master)](https://travis-ci.com/bgwest/08-Restful-API)
 ## Overview
@@ -41,7 +41,7 @@ To use this in your code:
 
 - git clone repo 
 - npm install 
-- require('../src/lib/app.js')
+- require('../src/app.js')
 
 ## Built With
 
@@ -51,6 +51,7 @@ To use this in your code:
 * Eslint
 * jest
 * superagent
+* uuid
 
 ## Contributing
 
