@@ -67,7 +67,7 @@ router.findAndExecuteRoutes = (request, response) => {
     }).catch(() => {
       logger.log(logger.INFO, 'Responding back with 400 status code');
       response.writeHead(400, { 'Content-Type': 'text/plain' });
-      response.write('Bad Request: router.js');
+      response.write('.catch() : router.js');
       response.end();
       return undefined;
     });
