@@ -66,7 +66,6 @@ const sendJSON = (statusCode, data, response) => {
 };
 
 app.post('/new/user', (request, response) => {
-
   if (!request.body) {
     sendStatus(400, 'body not found', response);
     return undefined;
@@ -95,20 +94,6 @@ app.post('/new/user', (request, response) => {
   return undefined;
 });
 
-// app.post('/login', (request, response) => {
-//   if (request.body.id) {
-//     validateAndReturnId(request.body.id, response, false);
-//     return undefined;
-//   }
-//
-//   if (request.url.query.id) {
-//     validateAndReturnId(request.url.query.id, response, false);
-//     return undefined;
-//   }
-//   return undefined;
-// });
-
-
 app.get('/', (request, response) => {
   response.write('<!DOCTYPE><header></header><body><div><p>cool beans.</p></div></body></html>');
   response.end();
@@ -127,5 +112,27 @@ app.delete('/', (request, response) => {
   const userID = (request.url.query.id) ? request.url.query.id : request.body.id;
   // delete is true
   validateAndReturnId(userID, response, true);
+  return undefined;
+});
+
+app.get('/get/users', (request, response) => {
+  const get = (request.url.query.getUsers) ? request.url.query.getUsers : request.body.getUsers;
+  console.log(`get = ${get}`);
+  if (get) {
+    console.log('inside of get if statement...');
+    //! development note: this would NEVER be done in real world...
+    //   this is just to satisfy the assignment request with the scenario I choose
+    let index = 0;
+    const listToDisplay = {};
+    while (userStorage.table[index]) {
+      const user = userStorage.table[index].username;
+      listToDisplay[`${user}`] = user;
+      index += 1;
+    }
+    sendJSON(200, listToDisplay, response);
+    return undefined;
+  }
+  console.log('before the write.');
+  // response.end();
   return undefined;
 });
