@@ -11,78 +11,161 @@
 * has a router constructor that handles requests to GET, POST, PUT, and DELETE requests
 * has a storage module that stores resources by their schema type (ex: note) and id
 
-#### How to run
+## How To
 
-Example:
+#####Example uses:
 ```
 npm run start-server
 ````
 
-in a different terminal:
+[x] adding a new user:
 
 ```
-[1]bwest:08-Restful-API bwest$ echo '{"username":"vsanchez","title":"Senior Software Engineer"}' | http localhost:3000/new/user
+[1]Benjamins-MBP:08-Restful-API bwest$ echo '{"username":"bgwest88","title":"Sysadmin / Junior Developer"}' | http localhost:4000/new/user
 HTTP/1.1 200 OK
 Connection: keep-alive
 Content-Type: application/json
-Date: Sat, 22 Sep 2018 06:21:33 GMT
+Date: Tue, 25 Sep 2018 02:20:37 GMT
 Transfer-Encoding: chunked
 
 {
-    "id": "c0a17ff0-be2f-11e8-93df-ffd9839776dd",
-    "timestamp": "2018-09-22T06:21:33.935Z",
-    "title": "Senior Software Engineer",
-    "username": "vsanchez"
+    "id": "976be5d0-c069-11e8-96c4-c19524662312",
+    "timestamp": "2018-09-25T02:20:37.933Z",
+    "title": "Sysadmin / Junior Developer",
+    "username": "bgwest88"
 }
 
-[0]bwest:08-Restful-API bwest$ echo '{"id":"c0a17ff0-be2f-11e8-93df-ffd9839776dd"}' | http localhost:3000/login
-HTTP/1.1 200 OK
-Connection: keep-alive
-Date: Sat, 22 Sep 2018 06:21:56 GMT
-Transfer-Encoding: chunked
-
-Hello, vsanchez.
-
-[0]bwest:08-Restful-API bwest$ echo '{"username":"bgwest","title":"Sysadmin / Junior Dev"}' | http localhost:3000/new/user?keys=12421i421\&next=1412413
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+[0]Benjamins-MBP:08-Restful-API bwest$ echo '{"username":"tanyan","title":"Front-end Web Developer"}' | http localhost:4000/new/user
 HTTP/1.1 200 OK
 Connection: keep-alive
 Content-Type: application/json
-Date: Sat, 22 Sep 2018 06:22:28 GMT
+Date: Tue, 25 Sep 2018 02:20:43 GMT
 Transfer-Encoding: chunked
 
 {
-    "id": "e1605f90-be2f-11e8-93df-ffd9839776dd",
-    "timestamp": "2018-09-22T06:22:28.874Z",
-    "title": "Sysadmin / Junior Dev",
-    "username": "bgwest"
+    "id": "9a9c1720-c069-11e8-96c4-c19524662312",
+    "timestamp": "2018-09-25T02:20:43.282Z",
+    "title": "Front-end Web Developer",
+    "username": "tanyan"
 }
 
-[0]bwest:08-Restful-API bwest$ echo '{"id":"e1605f90-be2f-11e8-93df-ffd9839776dd"}' | http :3000/login
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+[0]Benjamins-MBP:08-Restful-API bwest$ echo '{"username":"dramos","title":"Software Engineer"}' | http localhost:4000/new/user
 HTTP/1.1 200 OK
 Connection: keep-alive
-Date: Sat, 22 Sep 2018 06:23:08 GMT
+Content-Type: application/json
+Date: Tue, 25 Sep 2018 02:21:27 GMT
 Transfer-Encoding: chunked
 
-Hello, bgwest.
+{
+    "id": "b4decec0-c069-11e8-96c4-c19524662312",
+    "timestamp": "2018-09-25T02:21:27.340Z",
+    "title": "Software Engineer",
+    "username": "dramos"
+}
 
-[0]bwest:08-Restful-API bwest$
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+
+```
+
+[x] Get full user list:
+
+```
+
+[0]Benjamins-MBP:08-Restful-API bwest$ http :4000/get/users?getUsers=true
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Type: application/json
+Date: Tue, 25 Sep 2018 02:22:28 GMT
+Transfer-Encoding: chunked
+
+{
+    "bgwest88": "bgwest88",
+    "dramos": "dramos",
+    "tanyan": "tanyan"
+}
+
+```
+
+[x] "Login" as single user
+
+```
+
+[0]Benjamins-MBP:08-Restful-API bwest$ http :4000/login?id=b4decec0-c069-11e8-96c4-c19524662312
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Tue, 25 Sep 2018 02:22:51 GMT
+Transfer-Encoding: chunked
+
+Hello, dramos.
+
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+
+```
+
+[x] DELETE users
+
+```
+
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+[0]Benjamins-MBP:08-Restful-API bwest$ http DELETE :4000/?id=b4decec0-c069-11e8-96c4-c19524662312
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Tue, 25 Sep 2018 02:25:18 GMT
+Transfer-Encoding: chunked
+
+ID: b4decec0-c069-11e8-96c4-c19524662312 removed.
+
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+[0]Benjamins-MBP:08-Restful-API bwest$ http DELETE :4000/?id=9a9c1720-c069-11e8-96c4-c19524662312
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Tue, 25 Sep 2018 02:25:52 GMT
+Transfer-Encoding: chunked
+
+ID: 9a9c1720-c069-11e8-96c4-c19524662312 removed.
+
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+
+```
+
+[x] re-check users have been deleted:
+
+```
+
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+[0]Benjamins-MBP:08-Restful-API bwest$ http :4000/get/users?getUsers=true
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Type: application/json
+Date: Tue, 25 Sep 2018 02:26:01 GMT
+Transfer-Encoding: chunked
+
+{
+    "bgwest88": "bgwest88"
+}
+
+[0]Benjamins-MBP:08-Restful-API bwest$
+
 ```
 
 ### Tests Performed with Jest
 
-* test1: ensure api returns a status code of 404 for routes that have not been registered
+* test 1: should respond with 200 status code and json of newly created user
 
-* test2: ensure the /api/simple-resource-name endpoint responds as described for each condition below:
+* test 2: should respond with 200 status code and json of newly created username
 
-GET: (404) should respond with 'not found' for valid requests made with an id that was not found
+* test 3: should respond with 400 status code if there is no title
 
-GET: (400) should respond with 'bad request' if no id was provided in the request
+* test 4: should respond with 'bad request' if no request body was provided given at all.
 
-GET: (200) should contain a response body for a request made with a valid id 
+* test 5: for 'valid requests' made with an id that was not found, should respond with 404 'not found'
 
-POST: (400) should respond with 'bad request' if no request body was provided or the body was invalid
+* test 6: if no id was provided, should return bad request with 400 status
 
-POST: (200) should respond with the body content for a post request with a valid body
+* test 7: if valid ID is given ensure correct username is returned with 200 status
 
 
 ### Installing
@@ -96,7 +179,7 @@ To use this in your code:
 ## Built With
 
 * es6
-* NodeJS
+* NodeJS (fs, dotenv, http)
 * winston
 * Eslint
 * jest

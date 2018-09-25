@@ -34,7 +34,7 @@ function validateAndReturnId(idToQuery, response, toDelete) {
         return undefined;
       }
     }
-  }
+  } // else if DELETE is false
   logger.log(logger.INFO, `new user = ${idToQuery}`);
   for (let searchTable = 0; searchTable <= userStorage.table.length - 1; searchTable++) {
     if (userStorage.table[searchTable].id === idToQuery) {
@@ -44,8 +44,8 @@ function validateAndReturnId(idToQuery, response, toDelete) {
       return undefined;
     }
   } // else
-  response.writeHead(400, { 'Content-Type': 'text/plain' });
-  response.write('Bad Query: ensure id you are sending is valid.');
+  response.writeHead(404, { 'Content-Type': 'text/plain' });
+  response.write('Not found (Bad query): ensure the id you are sending is valid.');
   response.end();
   return undefined;
 }
@@ -53,6 +53,7 @@ function validateAndReturnId(idToQuery, response, toDelete) {
 const sendStatus = (statusCode, message, response) => {
   logger.log(logger.INFO, `Responding with a ${statusCode} status code due to ${message}`);
   response.writeHead(statusCode);
+  response.write(`Responding with a ${statusCode} status code due to ${message}`);
   response.end();
 };
 
@@ -100,13 +101,30 @@ app.get('/', (request, response) => {
   return undefined;
 });
 
+// this allows to post as JSON or use query string.
 app.post('/login', (request, response) => {
   const userID = (request.url.query.id) ? request.url.query.id : request.body.id;
-
+  // pass false as 3rd param to avoid triggering deletion.
   validateAndReturnId(userID, response, false);
 
   return undefined;
 });
+
+// this allows just query string as get
+app.get('/login', (request, response) => {
+  const userID = (request.url.query.id) ? request.url.query.id : false;
+
+  if (userID) {
+    // pass false as 3rd param to avoid triggering deletion.
+    validateAndReturnId(userID, response, false);
+    response.end();
+    return undefined;
+  } // else if ID was not included...
+  sendStatus(400, 'bad request: no id given.', response);
+  response.end();
+  return undefined;
+});
+
 
 app.delete('/', (request, response) => {
   const userID = (request.url.query.id) ? request.url.query.id : request.body.id;
