@@ -1,76 +1,203 @@
-![cf](https://i.imgur.com/7v5ASc8.png) Lab 08: Vanilla REST API
-======
+# RESTful API - app.js
+##### a vanilla RESTful API with in-memory persistence
+[![Build Status](https://travis-ci.com/bgwest/08-Restful-API.svg?branch=master)](https://travis-ci.com/bgwest/08-Restful-API)
+## Overview
 
-## Submission Instructions
-* Work in a fork of this repository
-* Work in a branch on your fork
-* Create a PR to your master from your working branch.
-* Ensure that your repository/branch is connected to travis-ci.com
-* Ensure that your repository/branch is connected to a dyno at heroku.com
-* Heroku and Travis should pick you up and deploy
-* Submit on canvas:
-  * a question and observation
-  * how long you spent
-  * link to your pull request
-  * link to your build at travis-ci URL
-  * Heroku Server URL
+* HTTP server with native NodeJS http module
+* have object constructor that creates a simple resource with at least 3 properties
+* include an id property that is set to a uuid (include two additional properties of your choice (ex: name, content, etc.) ).
+* has custom body parser module that uses promises to parse the JSON body of POST and PUT requests
+* has custom url parser that returns a promise
+* has a router constructor that handles requests to GET, POST, PUT, and DELETE requests
+* has a storage module that stores resources by their schema type (ex: note) and id
 
-## Learning Objectives  
-* students will learn to use promise constructs to manage asynchronous code
-* students will learn to create a vanilla RESTful API with in-memory persistence
+## How To
 
-## Requirements
+#####Example uses:
+```
+npm run start-server
+````
 
-## Configuration 
-Configure the root of your repository with the following files and directories. Thoughfully name and organize any aditional configuration or module files.
-* **README.md** - contains documentation
-* **.env** - contains env variables (should be git ignored)
-* **.gitignore** - contains a [robust](http://gitignore.io) `.gitignore` file 
-* **.eslintrc** - contains the course linter configuratoin
-* **.eslintignore** - contains the course linter ignore configuration
-* **.travis.yml** - contains the course linter ignore configuration
-* **package.json** - contains npm package config
-  * create a `lint` script for running eslint (eslint **/*.js)
-  * create a `test` script for running tests
-  * create a `start` script for running your server
-* **index.js** - the entry point for your application
-* **src/** - contains your core application files and folders
-* **src/app.js** - (or main.js) contains your core application bootstrap
-* **src/lib/** - contains module definitions
-* **\_\_test\_\_/** - contains unit tests
+[x] adding a new user:
 
-#### Feature Tasks
-* create the following directories to organize your code:
-  * `lib`
-  * `model`
-  * `test`
-* create an HTTP server using the native NodeJS `http` module
-* create an object constructor that creates a _simple resource_ with at least 3 properties
-  * include an `id` property that is set to a unique id (**hint:** you'll need to use `uuid`)
-  * include two additional properties of your choice (ex: name, content, etc.)
-* create a custom body parser module that uses promises to parse the JSON body of `POST` and `PUT` requests
-* create a custom url parser module that returns a promise and uses the NodeJS `url` and `querystring` modules to parse the request url
-* create a router constructor that handles requests to `GET`, `POST`, `PUT`, and `DELETE` requests
-* create a storage module that will store resources by their schema type (ex: note) and id
+```
+[1]Benjamins-MBP:08-Restful-API bwest$ echo '{"username":"bgwest88","title":"Sysadmin / Junior Developer"}' | http localhost:4000/new/user
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Type: application/json
+Date: Tue, 25 Sep 2018 02:20:37 GMT
+Transfer-Encoding: chunked
 
-## Server Endpoints
-### `/api/simple-resource-name`
-* `POST` request
- * pass data as stringifed JSON in the body of a **POST** request to create a new resource
-* `GET` request
- * pass `?id=<uuid>` as a query string parameter to retrieve a specific resource (as JSON)
- * `GET ALL (storage.fetchAll)` request
- * think of an API endpoint that makes sense, e.g.`/api/v1/notes`, and use that endpoint to retrieve an array of all the resource ID's
-* `DELETE` request
- * pass `?id=<uuid>` in the query string to **DELETE** a specific resource
- * this should return a 204 status code with no content in the body
+{
+    "id": "976be5d0-c069-11e8-96c4-c19524662312",
+    "timestamp": "2018-09-25T02:20:37.933Z",
+    "title": "Sysadmin / Junior Developer",
+    "username": "bgwest88"
+}
 
-## Tests
-* write a test to ensure that your api returns a status code of 404 for routes that have not been registered
-* write tests to ensure the `/api/simple-resource-name` endpoint responds as described for each condition below:
- * `GET`: test 404, it should respond with 'not found' for valid requests made with an id that was not found
- * `GET`: test 400, it should respond with 'bad request' if no id was provided in the request
- * `GET`: test 200, it should contain a response body for a request made with a valid id
- * `POST`: test 400, it should respond with 'bad request' if no request body was provided or the body was invalid
- * `POST`: test 200, it should respond with the body content for a post request with a valid body
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+[0]Benjamins-MBP:08-Restful-API bwest$ echo '{"username":"tanyan","title":"Front-end Web Developer"}' | http localhost:4000/new/user
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Type: application/json
+Date: Tue, 25 Sep 2018 02:20:43 GMT
+Transfer-Encoding: chunked
 
+{
+    "id": "9a9c1720-c069-11e8-96c4-c19524662312",
+    "timestamp": "2018-09-25T02:20:43.282Z",
+    "title": "Front-end Web Developer",
+    "username": "tanyan"
+}
+
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+[0]Benjamins-MBP:08-Restful-API bwest$ echo '{"username":"dramos","title":"Software Engineer"}' | http localhost:4000/new/user
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Type: application/json
+Date: Tue, 25 Sep 2018 02:21:27 GMT
+Transfer-Encoding: chunked
+
+{
+    "id": "b4decec0-c069-11e8-96c4-c19524662312",
+    "timestamp": "2018-09-25T02:21:27.340Z",
+    "title": "Software Engineer",
+    "username": "dramos"
+}
+
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+
+```
+
+[x] Get full user list:
+
+```
+
+[0]Benjamins-MBP:08-Restful-API bwest$ http :4000/get/users?getUsers=true
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Type: application/json
+Date: Tue, 25 Sep 2018 02:22:28 GMT
+Transfer-Encoding: chunked
+
+{
+    "bgwest88": "bgwest88",
+    "dramos": "dramos",
+    "tanyan": "tanyan"
+}
+
+```
+
+[x] "Login" as single user
+
+```
+
+[0]Benjamins-MBP:08-Restful-API bwest$ http :4000/login?id=b4decec0-c069-11e8-96c4-c19524662312
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Tue, 25 Sep 2018 02:22:51 GMT
+Transfer-Encoding: chunked
+
+Hello, dramos.
+
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+
+```
+
+[x] DELETE users
+
+```
+
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+[0]Benjamins-MBP:08-Restful-API bwest$ http DELETE :4000/?id=b4decec0-c069-11e8-96c4-c19524662312
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Tue, 25 Sep 2018 02:25:18 GMT
+Transfer-Encoding: chunked
+
+ID: b4decec0-c069-11e8-96c4-c19524662312 removed.
+
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+[0]Benjamins-MBP:08-Restful-API bwest$ http DELETE :4000/?id=9a9c1720-c069-11e8-96c4-c19524662312
+HTTP/1.1 200 OK
+Connection: keep-alive
+Date: Tue, 25 Sep 2018 02:25:52 GMT
+Transfer-Encoding: chunked
+
+ID: 9a9c1720-c069-11e8-96c4-c19524662312 removed.
+
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+
+```
+
+[x] re-check users have been deleted:
+
+```
+
+[0]Benjamins-MBP:08-Restful-API bwest$ 
+[0]Benjamins-MBP:08-Restful-API bwest$ http :4000/get/users?getUsers=true
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Type: application/json
+Date: Tue, 25 Sep 2018 02:26:01 GMT
+Transfer-Encoding: chunked
+
+{
+    "bgwest88": "bgwest88"
+}
+
+[0]Benjamins-MBP:08-Restful-API bwest$
+
+```
+
+### Tests Performed with Jest
+
+* test 1: should respond with 200 status code and json of newly created user
+
+* test 2: should respond with 200 status code and json of newly created username
+
+* test 3: should respond with 400 status code if there is no title
+
+* test 4: should respond with 'bad request' if no request body was provided given at all.
+
+* test 5: for 'valid requests' made with an id that was not found, should respond with 404 'not found'
+
+* test 6: if no id was provided, should return bad request with 400 status
+
+* test 7: if valid ID is given ensure correct username is returned with 200 status
+
+
+### Installing
+
+To use this in your code:
+
+- git clone repo 
+- npm install 
+- require('../src/app.js')
+
+## Built With
+
+* es6
+* NodeJS (fs, dotenv, http)
+* winston
+* Eslint
+* jest
+* superagent
+* uuid
+
+## Contributing
+
+Please feel free to contribute. Master branch auto merge locked for approval for non-contributors.
+
+## Versioning
+
+*n/a*
+
+## Authors
+
+![CF](http://i.imgur.com/7v5ASc8.png) **Benjamin West** 
+
+## License
+
+*none*
