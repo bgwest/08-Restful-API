@@ -1,5 +1,7 @@
 'use strict';
 
+process.env.PORT = 4000;
+
 const superagent = require('superagent');
 const server = require('../lib/server');
 
